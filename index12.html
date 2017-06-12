@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='app'>
+    <head>
+        <meta charset="utf-8">
+        <title>使用Angular实现SAP简单应用</title>
+        <style type="text/css">
+        	.myDiv li{
+				float: left;
+				width: 100px;
+				height: 40px;
+				margin-right: 5px;
+				background: yellowgreen;
+				line-height:40px;
+				text-align:center;
+				list-style:none;
+        	}
+        	.content{
+        		clear: both;
+        	}
+        </style>
+    </head>
+    <body>
+    	<div class="myDiv">
+    		<ul>
+    			<li><a href="#/index">Index</a></li>
+    			<li><a href="#/introduce">Introduce</a></li>
+    			<li><a href="#/contact">Contact</a></li>
+    		</ul>
+    	</div>
+    	<div class="content">
+    		<div ng-view></div>    		
+    	</div>
+    	<script type="text/javascript" src="libs/angular.min.js"></script>
+    	<script type="text/javascript" src="libs/angular-route.js"></script>
+    	<script type="text/javascript">
+    		var myApp=angular.module('app',['ngRoute']);
+    		//配置路由
+    		myApp.config(['$routeProvider',function($routeProvider){
+    			$routeProvider.when('/index',{
+    				template:"<h1>Index</h1>"
+    			})
+    			.when('/introduce',{
+    				template:"<h1>Introduce</h1>"
+    			})
+    			.when('/contact',{
+    				templateUrl:"contact.html",
+    				controller:"ContactController"
+    			})
+    			.otherwise({
+    				redirectTo:'/index'
+    			});
+    		}]);
+    		myApp.controller('ContactController',['$scope','$http',function($scope,$http){
+    			$http({
+    				url:"contact.php",
+    			}).success(function(result){
+    				$scope.txt=result;
+    			})
+    		}])
+    	</script>
+    </body>
+</html>
